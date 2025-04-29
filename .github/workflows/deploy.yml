@@ -12,52 +12,52 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flask frozen-flask
-          pip install -r requirements.txt
-
       - name: Create static site
         run: |
-          mkdir -p _site/static
-          cp -r public_html/static/* _site/static/
+          # Create site directory
+          mkdir -p _site
+          
+          # Copy static files
+          cp -r public_html/static _site/
+          
+          # Process and copy HTML files
           python -c "
-          from flask import Flask, url_for
-          from flask_frozen import Freezer
           import os
           import re
           
-          app = Flask(__name__, 
-                     static_folder='public_html/static',
-                     static_url_path='/Waimak-Website/static')
-          
-          freezer = Freezer(app)
-          
-          def process_template(content):
-              # Update static file references
+          def process_html(content):
+              # Update static file paths
               content = content.replace('\"/static/', '\"/Waimak-Website/static/')
               return content
           
-          @app.route('/')
-          def home():
-              with open('templates/home.html', 'r') as f:
-                  content = f.read()
-              return process_template(content)
+          # Process main templates
+          os.makedirs('_site', exist_ok=True)
           
-          @app.route('/<page>')
-          def pages(page):
+          # Copy and process home page
+          with open('templates/home.html', 'r') as f:
+              content = f.read()
+          with open('_site/index.html', 'w') as f:
+              f.write(process_html(content))
+          
+          # Copy and process other pages
+          pages = ['about', 'approach', 'contact', 'partners', 'faq']
+          for page in pages:
+              os.makedirs(f'_site/{page}', exist_ok=True)
               with open(f'templates/{page}.html', 'r') as f:
                   content = f.read()
-              return process_template(content)
+              with open(f'_site/{page}/index.html', 'w') as f:
+                  f.write(process_html(content))
           
-          if __name__ == '__main__':
-              freezer.freeze()
+          # Copy navbar template
+          with open('templates/navbar.html', 'r') as f:
+              navbar = f.read()
+          with open('_site/navbar.html', 'w') as f:
+              f.write(process_html(navbar))
           "
 
       - name: Deploy to GitHub Pages
