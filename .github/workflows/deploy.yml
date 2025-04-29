@@ -32,19 +32,50 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jinja2
       - name: Prepare static files
         run: |
-          # Create a directory for our static site
-          mkdir -p _site
-          # Copy templates
-          cp -r templates/* _site/
-          # Rename home.html to index.html
-          mv _site/home.html _site/index.html
-          # Copy static assets
-          mkdir -p _site/static
-          cp -r public_html/static/* _site/static/
-          # Fix static file paths in all HTML files
-          find _site -type f -name "*.html" -exec sed -i 's/\/static\//\/Waimak-Website\/static\//g' {} +
+          python -c "
+          import os
+          from jinja2 import Environment, FileSystemLoader
+          
+          # Set up Jinja2 environment
+          env = Environment(loader=FileSystemLoader('templates'))
+          
+          # Create output directory
+          os.makedirs('_site', exist_ok=True)
+          os.makedirs('_site/static', exist_ok=True)
+          
+          # Copy static files
+          os.system('cp -r public_html/static/* _site/static/')
+          
+          def process_template(template_name, output_path):
+              template = env.get_template(template_name)
+              content = template.render()
+              
+              # Fix static file paths
+              content = content.replace('\"/static/', '\"/Waimak-Website/static/')
+              
+              # Write the processed file
+              with open(output_path, 'w', encoding='utf-8') as f:
+                  f.write(content)
+          
+          # Process home page
+          process_template('home.html', '_site/index.html')
+          
+          # Process other pages
+          pages = ['about', 'approach', 'contact', 'partners', 'faq']
+          for page in pages:
+              os.makedirs(f'_site/{page}', exist_ok=True)
+              process_template(f'{page}.html', f'_site/{page}/index.html')
+          "
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
