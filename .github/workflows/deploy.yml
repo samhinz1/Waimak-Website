@@ -20,15 +20,37 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install flask frozen-flask
           pip install -r requirements.txt
-          pip install ghp-import
 
-      - name: Build static site
+      - name: Create static site
         run: |
-          python app.py build
+          mkdir _site
+          cp -r public_html/static _site/
+          python -c "
+          from flask import Flask
+          from flask_frozen import Freezer
+          import os
+          
+          app = Flask(__name__, static_folder='public_html/static', static_url_path='/static')
+          freezer = Freezer(app)
+          
+          @app.route('/')
+          def home():
+              with open('templates/home.html', 'r') as f:
+                  return f.read()
+          
+          @app.route('/<page>')
+          def pages(page):
+              with open(f'templates/{page}.html', 'r') as f:
+                  return f.read()
+          
+          if __name__ == '__main__':
+              freezer.freeze()
+          "
 
       - name: Deploy to GitHub Pages
-        run: |
-          ghp-import -n -p -f _build/html
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site 
