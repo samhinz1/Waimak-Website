@@ -25,25 +25,36 @@ jobs:
 
       - name: Create static site
         run: |
-          mkdir _site
-          cp -r public_html/static _site/
+          mkdir -p _site/static
+          cp -r public_html/static/* _site/static/
           python -c "
-          from flask import Flask
+          from flask import Flask, url_for
           from flask_frozen import Freezer
           import os
+          import re
           
-          app = Flask(__name__, static_folder='public_html/static', static_url_path='/static')
+          app = Flask(__name__, 
+                     static_folder='public_html/static',
+                     static_url_path='/Waimak-Website/static')
+          
           freezer = Freezer(app)
+          
+          def process_template(content):
+              # Update static file references
+              content = content.replace('\"/static/', '\"/Waimak-Website/static/')
+              return content
           
           @app.route('/')
           def home():
               with open('templates/home.html', 'r') as f:
-                  return f.read()
+                  content = f.read()
+              return process_template(content)
           
           @app.route('/<page>')
           def pages(page):
               with open(f'templates/{page}.html', 'r') as f:
-                  return f.read()
+                  content = f.read()
+              return process_template(content)
           
           if __name__ == '__main__':
               freezer.freeze()
