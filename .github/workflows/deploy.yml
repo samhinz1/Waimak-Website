@@ -53,8 +53,19 @@ jobs:
           os.makedirs('_site', exist_ok=True)
           os.makedirs('_site/static', exist_ok=True)
           
-          # Copy static files
+          # Copy and process static files
           os.system('cp -r public_html/static/* _site/static/')
+          
+          # Fix paths in CSS files
+          for root, dirs, files in os.walk('_site/static'):
+              for file in files:
+                  if file.endswith('.css'):
+                      css_path = os.path.join(root, file)
+                      with open(css_path, 'r', encoding='utf-8') as f:
+                          content = f.read()
+                      content = content.replace('\'/static/', '\'/Waimak-Website/static/')
+                      with open(css_path, 'w', encoding='utf-8') as f:
+                          f.write(content)
           
           def process_template(template_name, output_path):
               template = env.get_template(template_name)
