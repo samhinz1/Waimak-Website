@@ -1,67 +1,54 @@
-name: Deploy to GitHub Pages
+name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: [ main ]
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Create static site
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare static files
         run: |
-          # Create site directory
+          # Create a directory for our static site
           mkdir -p _site
-          
-          # Copy static files
-          cp -r public_html/static _site/
-          
-          # Process and copy HTML files
-          python -c "
-          import os
-          import re
-          
-          def process_html(content):
-              # Update static file paths
-              content = content.replace('\"/static/', '\"/Waimak-Website/static/')
-              return content
-          
-          # Process main templates
-          os.makedirs('_site', exist_ok=True)
-          
-          # Copy and process home page
-          with open('templates/home.html', 'r') as f:
-              content = f.read()
-          with open('_site/index.html', 'w') as f:
-              f.write(process_html(content))
-          
-          # Copy and process other pages
-          pages = ['about', 'approach', 'contact', 'partners', 'faq']
-          for page in pages:
-              os.makedirs(f'_site/{page}', exist_ok=True)
-              with open(f'templates/{page}.html', 'r') as f:
-                  content = f.read()
-              with open(f'_site/{page}/index.html', 'w') as f:
-                  f.write(process_html(content))
-          
-          # Copy navbar template
-          with open('templates/navbar.html', 'r') as f:
-              navbar = f.read()
-          with open('_site/navbar.html', 'w') as f:
-              f.write(process_html(navbar))
-          "
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+          # Copy templates
+          cp -r templates/* _site/
+          # Rename home.html to index.html
+          mv _site/home.html _site/index.html
+          # Copy static assets
+          mkdir -p _site/static
+          cp -r public_html/static/* _site/static/
+          # Fix static file paths in all HTML files
+          find _site -type f -name "*.html" -exec sed -i 's/\/static\//\/Waimak-Website\/static\//g' {} +
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site 
+          path: '_site'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
