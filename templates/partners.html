@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAM | Partners</title>
+    <link rel="icon" type="image/webp" href="/static/Waimakicon.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="banner">
+        <img src="/static/photo1.webp" alt="Banner Image">
+        <h2 class="banner-title">Our Partners | </h2>
+    </div>
+
+    <section class="features" id="about">
+        <h2>Our Partners</h2>
+        <div class="philosophy-content">
+            <div class="partner-logos">
+                <span class="fade-line">
+                    <img src="/static/ibkrlogo.webp" alt="Interactive Brokers Logo">
+                </span>
+                <span class="fade-line">
+                    <img src="/static/finclearlogo.webp" alt="Finclear Logo">
+                </span>
+            </div>
+
+            <p>WAM has partnered with 2 brokerage providers to offer our services on. Waimak spent months researching, testing and negotiating with various providers before selecting both platforms to bring world class service to our clients. 
+
+                Interactive Brokers (IBKR) provides our primary portfolio management tools, while Finclear is used for all our corporate actions opportunities such as IPO's and placements. </p>
+
+        <h2>Fees & Account Features</h2>
+        <div class="fees-tables-container">
+            <div class="fees-table">
+                <h3>Interactive Brokers</h3>
+                <div class="fee-row">
+                    <div class="fee-label">US Commissions</div>
+                    <div class="fee-value">Starting from $0.005 USD per share with a minimum of $1 USD per order</div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">AU Commissions</div>
+                    <div class="fee-value">Starting from 0.088% of trade value with minimum $6.60 AUD</div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">Account Security</div>
+                    <div class="fee-value">
+                        • Nasdaq Listed (Ticker: IBKR)<br>
+                        • $70B+ Market cap<br>
+                        • $16.1B USD in equity capital<br>
+                        • 3.12M clients globally<br>
+                        • Regulated by ASIC under AFSL no. 453554
+                    </div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">Account Features</div>
+                    <div class="fee-value">
+                    • Dedicated IBKR/Waimak portal with client login<br>
+                    • Easily see your portfolio, trade history, account balances and more<br>
+                    • Electronic tax reporting including P/L, transaction history and holdings as at 30th June<br>
+                    • Easy deposit & withdrawal options<br>
+                    • Global coverage of major exchanges and trading venues<br>
+                    • Management & Performance fees are deducted automatically from client accounts
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="fees-table">
+                <h3>Finclear</h3>
+                <div class="fee-row">
+                    <div class="fee-label">US Commissions</div>
+                    <div class="fee-value">N/A</div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">AU Commissions</div>
+                    <div class="fee-value">Starting from 30bps of trade value with a minimum of $100 AUD</div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">Account Security</div>
+                    <div class="fee-value">
+                        • Securities are held under HIN registration<br>
+                        • Seperate Macquarie Cash Management account<br>
+                        • Regulated by ASIC under AFSL No. 246842
+                    </div>
+                </div>
+                <div class="fee-row">
+                    <div class="fee-label">Account Features</div>
+                    <div class="fee-value">
+                        • Access to corporate actions opportunities<br>
+                        • Dedicated Waimak performance reporting portal<br>
+                        • Easy deposit & withdrawal options<br>
+                        • Deposit covered by the Australian Government's financial claims scheme (FCS)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .cards-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .card {
+            flex: 1;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            max-width: calc(25% - 15px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .cards-container {
+                flex-wrap: wrap;
+            }
+            
+            .card {
+                flex: calc(50% - 20px);
+                min-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                flex-direction: column;
+            }
+            
+            .card {
+                width: 100%;
+            }
+        }
+
+        .features {
+            padding-top: 40px;
+        }
+
+        .card-content {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+            transition: opacity 0.2s ease;
+        }
+
+        .card-content.expanded {
+            opacity: 1;
+            height: auto;
+            margin: 15px 0;
+            /* Delay the content appearance until after card expansion */
+            transition: opacity 0.2s ease 0.2s;
+        }
+
+        .card.expanded {
+            position: absolute;
+            left: 0;
+            max-width: 100%;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .card.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .expand-btn {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: auto;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .expand-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .expand-btn.expanded {
+            background-color: #e0e0e0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card-header svg {
+            flex-shrink: 0;
+        }
+
+        .card-header h3 {
+            margin: 0;
+        }
+
+        .philosophy-content {
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .philosophy-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Update existing styles to add spacing between sections */
+        .features h2 {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .features h2:not(:first-child) {
+            margin-top: 60px;
+        }
+
+        .fees-tables-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .fees-table {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .fees-table h3 {
+            text-align: center;
+            padding: 15px;
+            margin: 0;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fee-row {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            flex: 1;
+        }
+
+        .fee-row:last-child {
+            border-bottom: none;
+            flex: 1;
+        }
+
+        .fee-label {
+            flex: 0 0 200px;
+            padding: 20px;
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .fee-value {
+            flex: 1;
+            padding: 20px;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .fee-value ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .fee-value br {
+            margin: 4px 0;
+            display: block;
+            content: "";
+        }
+
+        .fee-value p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .fees-tables-container {
+                flex-direction: column;
+                margin: 20px;
+                gap: 40px;
+            }
+
+            .fees-table {
+                width: 100%;
+            }
+
+            .fee-row {
+                flex-direction: column;
+                border-bottom: 1px solid #eee;
+                padding: 10px 0;
+            }
+
+            .fee-label {
+                flex: none;
+                width: 100%;
+                padding: 10px 15px;
+                background: #f8f9fa;
+                border-radius: 5px;
+            }
+
+            .fee-value {
+                padding: 15px;
+                background: none;
+            }
+
+            .fee-value br {
+                margin: 8px 0;  /* Increased spacing between lines on mobile */
+            }
+        }
+
+        .partner-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .partner-logos .fade-line {
+            display: block;
+        }
+
+        .partner-logos img {
+            max-width: 300px;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .partner-logos {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .partner-logos img {
+                max-width: 250px;
+            }
+        }
+
+        .fade-line {
+            transition: opacity 0.3s ease;
+        }
+
+        .banner-title {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    color: rgba(255, 255, 255, 0.881);
+    margin: 0;
+    font-weight: 250;
+    font-size: 4rem;
+}
+    </style>
+
+    <script>
+        function wrapTextNodes(container) {
+            // Skip if this is a script or style tag
+            if (['SCRIPT', 'STYLE'].includes(container.tagName)) return;
+            
+            const walker = document.createTreeWalker(
+                container,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                // Skip empty text nodes
+                if (node.textContent.trim() === '') continue;
+                textNodes.push(node);
+            }
+
+            textNodes.forEach(textNode => {
+                // Split text by lines and wrap each in a span
+                const lines = textNode.textContent.split('\n');
+                const spans = lines.map((line, index) => {
+                    if (line.trim() === '') return document.createTextNode('\n');
+                    const span = document.createElement('span');
+                    span.textContent = line;
+                    span.className = 'fade-line';
+                    return span;
+                });
+
+                const parent = textNode.parentNode;
+                const fragment = document.createDocumentFragment();
+                spans.forEach(span => fragment.appendChild(span));
+                parent.replaceChild(fragment, textNode);
+            });
+        }
+
+        function handleScroll() {
+            const fadeLines = document.querySelectorAll('.fade-line');
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar.offsetHeight;
+            const fadeStartOffset = 150; // Increased offset for more gradual fade
+
+            fadeLines.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const distanceToNavbar = rect.top - navbarHeight;
+                
+                if (distanceToNavbar < fadeStartOffset && distanceToNavbar > -rect.height) {
+                    const opacity = Math.max(0, Math.min(1, distanceToNavbar / fadeStartOffset));
+                    element.style.opacity = opacity;
+                } else if (distanceToNavbar >= fadeStartOffset) {
+                    element.style.opacity = 1;
+                } else {
+                    element.style.opacity = 0;
+                }
+            });
+        }
+
+        // Initialize the effect
+        document.addEventListener('DOMContentLoaded', () => {
+            // Target all text-containing sections
+            const sections = document.querySelectorAll(
+                '.philosophy-content, .fees-table, .disclaimer, .features > h2, .fee-label, .fee-value'
+            );
+            sections.forEach(section => wrapTextNodes(section));
+            
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+        });
+    </script>
+
+    <div class="disclaimer">
+        <p>Waimak Asset Management (Waimak) Pty Ltd (ABN: 92 647 876 346) is a Corporate Authorised Representative (No 1288629) of Sanlam Private Wealth (AFS License No 337927).
+            Waimak does not provide personal advice. All trade information and content are not to be considered financial advice of any kind. You should obtain independent financial advice in respect of any financial decision in relation to any stock discussed on Waimak. Information provided is general advice only and should not be relied upon as the basis of an investment decision.
+            
+            By using Waimak's site and services, you have agreed to the Waimak's Terms of Service and Privacy Policy, and acknowledged that Waimak Asset Management Pty Ltd and Traders are not liable to you, or any other party, for your use of any information you receive. Information presented on Waimak is from sources we believe are reliable. Waimak, its directors, employees, associates and consultants do not represent, warrant or guarantee expressly or impliedly, that the information contained in any medium is complete or accurate. This document is for private communication to Waimak users and is not intended for public circulation. Disclosure of interest: Waimak Pty Ltd may receive commissions or payments from parties mentioned or discussed. Waimak and its associates may hold positions and trade in shares in the companies discussed or displayed. Waimak is not an advisory service, all investors should consult a licensed professional before making any investment decisions. By accessing the Waimak's services, you agree to relinquish any recourse to claim damages resulting from the information received through the from us. The information that we provide has been obtained from sources which we believe are reliable however we make no guarantee as to the accuracy or completeness of such information. Please be aware, it is possible that Waimak Asset Management (WAM), it's employees or associates have a position in (either long or short) or have previously bought or sold shares in the companies for which information is presented. At times stocks managed or discussed by WAM may be already owned by any, of Waimak's employees or associates and their related entities. The information provided by Waimakassetmanagement.com, other communications, any related sites, webinars, emails or newsletters is intended for your sole consumption and use and is not be distributed to or shared with any 3rd party. All data is for your personal use only; it may not be posted on web sites, message boards, communicated verbally, or be used in products or services. All material in the Waimak website and its related websites and pages are protected under copyright laws of the Australia. In addition to this disclaimer, you acknowledge you have read and agree to be bound by the terms and conditions set out in the Waimak 'User Terms of Service. The information provided by Waimak and all related Waimak products is provided without regard to your investment goals, financial circumstances, investment knowledge, or personal attitudes towards risk, investing, or trading abilities. Investors can and do lose money from trading. Investments fail. You agree not to hold Waimak Asset Management Pty Ltd and all Waimak Employees and associates (including related entities) liable as a result of reading any material published on this Web site or provided by Waimak. The Information provided by Waimak is not to be relied upon for any of your investment decisions. Your decisions to buy, sell or hold any securities is as a result your own free will and your own research and in no way attributed to information accessed through Waimak.</p>
+
+    </div>
+</body>
+</html>

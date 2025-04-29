@@ -1,0 +1,5 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/waimsezc/waimak"
+PassengerBaseURI "/"
+PassengerPython "/home/waimsezc/virtualenv/waimak/3.9/bin/python"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END

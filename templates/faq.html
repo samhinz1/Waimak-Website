@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAM | FAQ</title>
+    <link rel="icon" type="image/webp" href="/static/Waimakicon.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        .faq-item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f8f8f8;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .faq-question:hover {
+            background: #f0f0f0;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px 20px;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .banner-title {
+            position: absolute;
+            bottom: 15%;
+            left: 10%;
+            color: rgba(255, 255, 255, 0.881);
+            margin: 0;
+            font-weight: 250;
+            font-size: 4rem;
+        }
+
+        .contact-redirect {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .contact-redirect a {
+            color: #000;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .contact-redirect a:hover {
+            color: #333;
+        }
+
+        .fade-line {
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="banner">
+        <img src="/static/faqimage.webp" alt="Banner Image">
+        <h2 class="banner-title">FAQ | </h2>
+    </div>
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <button class="faq-question">
+                What account types do you accept?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                We can accept all Australian entity types including individuals, trusts, companies SMSF's or partnerships. Clients must meet the S708/wholesale investor criteria. If you are unsure if you meet this criteria, please contact us.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What licensing does Waimak have?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                Waimak is a Corporate Authorised Representative (No 1288629) of Sanlam Private Wealth (AFS License No 337927). 
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What is the minimum investment amount?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                Our minimum investment is $100,000 AUD
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What is the structure of the accounts?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                Each client has a separate/segregated account in the name of the entity. We offer Waimak's service under an individually managed account (IMA) structure meaning there is no unit trust. This means that the client is the beneficial owner of the assets.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What are the benefits of an IMA?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                There are several benefits of an IMA including:<br>
+                - Greater flexibility and speed over withdrawals/deposits<br>
+                - Dedicated client portal with full access to trading and account information<br>
+                - Detailed tax reporting tools for each individual client<br>
+                - Higher level of account security as client funds are never combined/pooled<br>
+                
+                
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How does Waimak charge fees?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                All fees are automatically calculated and deducted from your IBKR account. Management fees are charged monthly at the calculated NAV, and performance fees are charged each calendar year at the calculated NAV. Fees are deducted within 5-7 business days after the calculation period
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                What are the transactions/commissions associated with an account?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                All commissions/transaction fees are charged on an individual basis. IBKR has very competitive rates, you can see their exact commissions on their website at <a href="https://interactivebrokers.com.au" target="_blank">interactivebrokers.com.au</a>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Is there a minimum time before withdrawing money from my account?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                Yes, we generally advise at least 12 months before making any withdrawal requests. Under exceptional circumstances, please contact us.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Does Waimak accept SMSF's?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                Yes, Waimak can accept SMSF's providing you also meet the S708 requirements
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How does Waimak manage risk?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                We have several key risk mitigation measures including stop losses, max loss levels, distribution/market health checks as well as natural diversification through a basket of names. Waimak has the ability to move to cash or net short should overall conditions require us to do so.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How can I deposit/withdraw funds from my account?
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+                All deposits and withdrawals are processed through your IBKR account and can be initiated on the client portal.
+            </div>
+        </div>
+
+        <div class="contact-redirect">
+            <p>For any other questions, please <a href="/contact">contact us</a>.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // FAQ toggle functionality
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', () => {
+                    // Close all other FAQ items first
+                    document.querySelectorAll('.faq-item.active').forEach(activeItem => {
+                        if (activeItem !== question.parentElement) {
+                            activeItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle the clicked FAQ item
+                    const faqItem = question.parentElement;
+                    faqItem.classList.toggle('active');
+                });
+            });
+
+            // Update the wrapTextNodes function to exclude FAQ answers
+            function wrapTextNodes(container) {
+                if (['SCRIPT', 'STYLE'].includes(container.tagName)) return;
+                
+                // Skip FAQ answer elements
+                if (container.classList.contains('faq-answer')) return;
+                
+                const walker = document.createTreeWalker(
+                    container,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+
+                const textNodes = [];
+                let node;
+                while (node = walker.nextNode()) {
+                    if (node.textContent.trim() === '') continue;
+                    textNodes.push(node);
+                }
+
+                textNodes.forEach(textNode => {
+                    const lines = textNode.textContent.split('\n');
+                    const spans = lines.map((line, index) => {
+                        if (line.trim() === '') return document.createTextNode('\n');
+                        const span = document.createElement('span');
+                        span.textContent = line;
+                        span.className = 'fade-line';
+                        return span;
+                    });
+
+                    const parent = textNode.parentNode;
+                    const fragment = document.createDocumentFragment();
+                    spans.forEach(span => fragment.appendChild(span));
+                    parent.replaceChild(fragment, textNode);
+                });
+            }
+
+            // Update the sections selector to be more specific
+            const sections = document.querySelectorAll('.faq-container > *:not(.faq-item)');
+            sections.forEach(section => wrapTextNodes(section));
+            
+            function handleScroll() {
+                const fadeLines = document.querySelectorAll('.fade-line');
+                const navbar = document.querySelector('.navbar');
+                const navbarHeight = navbar.offsetHeight;
+                const fadeStartOffset = 150;
+
+                fadeLines.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const distanceToNavbar = rect.top - navbarHeight;
+                    
+                    if (distanceToNavbar < fadeStartOffset && distanceToNavbar > -rect.height) {
+                        const opacity = Math.max(0, Math.min(1, distanceToNavbar / fadeStartOffset));
+                        element.style.opacity = opacity;
+                    } else if (distanceToNavbar >= fadeStartOffset) {
+                        element.style.opacity = 1;
+                    } else {
+                        element.style.opacity = 0;
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+        });
+    </script>
+
+<div class="disclaimer">
+    <p>Waimak Asset Management (Waimak) Pty Ltd (ABN: 92 647 876 346) is a Corporate Authorised Representative (No 1288629) of Sanlam Private Wealth (AFS License No 337927).
+        Waimak does not provide personal advice. All trade information and content are not to be considered financial advice of any kind. You should obtain independent financial advice in respect of any financial decision in relation to any stock discussed on Waimak. Information provided is general advice only and should not be relied upon as the basis of an investment decision.
+        
+        By using Waimak's site and services, you have agreed to the Waimak's Terms of Service and Privacy Policy, and acknowledged that Waimak Asset Management Pty Ltd and Traders are not liable to you, or any other party, for your use of any information you receive. Information presented on Waimak is from sources we believe are reliable. Waimak, its directors, employees, associates and consultants do not represent, warrant or guarantee expressly or impliedly, that the information contained in any medium is complete or accurate. This document is for private communication to Waimak users and is not intended for public circulation. Disclosure of interest: Waimak Pty Ltd may receive commissions or payments from parties mentioned or discussed. Waimak and its associates may hold positions and trade in shares in the companies discussed or displayed. Waimak is not an advisory service, all investors should consult a licensed professional before making any investment decisions. By accessing the Waimak's services, you agree to relinquish any recourse to claim damages resulting from the information received through the from us. The information that we provide has been obtained from sources which we believe are reliable however we make no guarantee as to the accuracy or completeness of such information. Please be aware, it is possible that Waimak Asset Management (WAM), it's employees or associates have a position in (either long or short) or have previously bought or sold shares in the companies for which information is presented. At times stocks managed or discussed by WAM may be already owned by any, of Waimak's employees or associates and their related entities. The information provided by Waimakassetmanagement.com, other communications, any related sites, webinars, emails or newsletters is intended for your sole consumption and use and is not be distributed to or shared with any 3rd party. All data is for your personal use only; it may not be posted on web sites, message boards, communicated verbally, or be used in products or services. All material in the Waimak website and its related websites and pages are protected under copyright laws of the Australia. In addition to this disclaimer, you acknowledge you have read and agree to be bound by the terms and conditions set out in the Waimak ‘User Terms of Service. The information provided by Waimak and all related Waimak products is provided without regard to your investment goals, financial circumstances, investment knowledge, or personal attitudes towards risk, investing, or trading abilities. Investors can and do lose money from trading. Investments fail. You agree not to hold Waimak Asset Management Pty Ltd and all Waimak Employees and associates (including related entities) liable as a result of reading any material published on this Web site or provided by Waimak. The Information provided by Waimak is not to be relied upon for any of your investment decisions. Your decisions to buy, sell or hold any securities is as a result your own free will and your own research and in no way attributed to information accessed through Waimak.</p>
+
+</div>
+</body>
+</html>

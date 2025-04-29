@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAM | Team</title>
+    <link rel="icon" type="image/webp" href="/static/Waimakicon.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="banner">
+        <img src="/static/mountain.webp" alt="Banner Image">
+        <h2 class="banner-title">Our Team | </h2>
+    </div>
+
+    <section class="features" id="about">
+        <p class="team-intro">With over 40+ years of combined experience in capital markets, the Waimak team has the experience to navigate all market environments. <br>
+            Our goal is to build long-term wealth for our clients while developing relationships built off trust, integrity and transparency. </p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="/static/georgephoto.webp" alt="George Rolleston" class="team-photo">
+                        <h3>George Rolleston</h3>
+                        <p>Founder & Chief Investment Officer</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="back-left">
+                            <img src="/static/georgephoto.webp" alt="George Rolleston" class="team-photo-small">
+                            <h3>George Rolleston</h3>
+                            <p>Founder & CIO</p>
+                        </div>
+                        <div class="back-right">
+                            <p>Founded by George Rolleston (MAPPFIN) B Bus (Law), who has over 18 years of experience in financial markets. George sits on a number of boards in both the public and private markets and is the cornerstone investor in WAM.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <img src="/static/samphoto.webp" alt="Sam Hinz" class="team-photo">
+                        <h3>Sam Hinz</h3>
+                        <p>US Portfolio Manager</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="back-left">
+                            <img src="/static/samphoto.webp" alt="Sam Hinz" class="team-photo-small">
+                            <h3>Sam Hinz</h3>
+                            <p>US PM</p>
+                        </div>
+                        <div class="back-right">
+                            <p>Sam Hinz (B Bus, Economics & Finance) was a founding team member alongside George. Based in London, Sam leads our US & European operations, enabling WAM to provide comprehensive real-time service across global markets. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <style>
+
+.banner {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 25%;
+        }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 50px;
+            padding-bottom: 120px;
+        }
+
+        .faq-item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f8f8f8;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .faq-question:hover {
+            background: #f0f0f0;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px 20px;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq h2 {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-container ul {
+            display: flex;
+            align-items: center;
+        }
+
+        .login-item {
+            margin-left: 30px; /* Adds space between regular nav items and login */
+        }
+
+        .login-button {
+            border: 2px solid current
+        }
+
+        .team-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            perspective: 1000px;
+            height: 500px;
+            width: 300px;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: white;
+            overflow: hidden;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .feature-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-left {
+            width: 100%;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .back-right {
+            width: 100%;
+            text-align: left;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .team-photo-small {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .team-intro {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            text-align: center;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        .banner-title {
+            position: absolute;
+            bottom: 15%;
+            left: 10%;
+            color: rgba(255, 255, 255, 0.881);
+            margin: 0;
+            font-weight: 250;
+            font-size: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .card-back {
+                font-size: 0.9rem; /* Adjust the font size for smaller screens */
+            }
+
+            .back-left h3, .back-right p {
+                font-size: 0.8rem; /* Further reduce font size for specific elements */
+            }
+
+            .back-left img, .team-photo-small {
+                width: 80px; /* Adjust image size for smaller screens */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-back {
+                font-size: 0.8rem; /* Further adjust the font size for very small screens */
+            }
+
+            .back-left h3, .back-right p {
+                font-size: 0.7rem; /* Further reduce font size for specific elements */
+            }
+
+            .back-left img, .team-photo-small {
+                width: 70px; /* Further adjust image size for very small screens */
+                height: 70px;
+            }
+        }
+    </style>
+
+    <script>
+        function wrapTextNodes(container) {
+            // Skip if this is a script or style tag
+            if (['SCRIPT', 'STYLE'].includes(container.tagName)) return;
+            
+            const walker = document.createTreeWalker(
+                container,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            const textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                // Skip empty text nodes
+                if (node.textContent.trim() === '') continue;
+                textNodes.push(node);
+            }
+
+            textNodes.forEach(textNode => {
+                // Split text by lines and wrap each in a span
+                const lines = textNode.textContent.split('\n');
+                const spans = lines.map((line, index) => {
+                    if (line.trim() === '') return document.createTextNode('\n');
+                    const span = document.createElement('span');
+                    span.textContent = line;
+                    span.className = 'fade-line';
+                    return span;
+                });
+
+                const parent = textNode.parentNode;
+                const fragment = document.createDocumentFragment();
+                spans.forEach(span => fragment.appendChild(span));
+                parent.replaceChild(fragment, textNode);
+            });
+        }
+
+        function handleScroll() {
+            const fadeLines = document.querySelectorAll('.fade-line');
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar.offsetHeight;
+            const fadeStartOffset = 150; // Increased offset for more gradual fade
+
+            fadeLines.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const distanceToNavbar = rect.top - navbarHeight;
+                
+                if (distanceToNavbar < fadeStartOffset && distanceToNavbar > -rect.height) {
+                    const opacity = Math.max(0, Math.min(1, distanceToNavbar / fadeStartOffset));
+                    element.style.opacity = opacity;
+                } else if (distanceToNavbar >= fadeStartOffset) {
+                    element.style.opacity = 1;
+                } else {
+                    element.style.opacity = 0;
+                }
+            });
+        }
+
+        // Initialize the effect
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add .feature-card to include the icons, and specifically target the icons
+            const sections = document.querySelectorAll('.features, .disclaimer, .feature-card, .icon i');
+            sections.forEach(section => wrapTextNodes(section));
+            
+            // Also directly add the fade-line class to all icons
+            document.querySelectorAll('.icon i').forEach(icon => {
+                icon.classList.add('fade-line');
+            });
+            
+            window.addEventListener('scroll', handleScroll);
+            handleScroll();
+
+            // Add event listeners to FAQ questions
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const faqItem = question.parentElement;
+                    faqItem.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+
+    <div class="disclaimer">
+        <p>Waimak Asset Management (Waimak) Pty Ltd (ABN: 92 647 876 346) is a Corporate Authorised Representative (No 1288629) of Sanlam Private Wealth (AFS License No 337927).
+            Waimak does not provide personal advice. All trade information and content are not to be considered financial advice of any kind. You should obtain independent financial advice in respect of any financial decision in relation to any stock discussed on Waimak. Information provided is general advice only and should not be relied upon as the basis of an investment decision.
+            
+            By using Waimak's site and services, you have agreed to the Waimak's Terms of Service and Privacy Policy, and acknowledged that Waimak Asset Management Pty Ltd and Traders are not liable to you, or any other party, for your use of any information you receive. Information presented on Waimak is from sources we believe are reliable. Waimak, its directors, employees, associates and consultants do not represent, warrant or guarantee expressly or impliedly, that the information contained in any medium is complete or accurate. This document is for private communication to Waimak users and is not intended for public circulation. Disclosure of interest: Waimak Pty Ltd may receive commissions or payments from parties mentioned or discussed. Waimak and its associates may hold positions and trade in shares in the companies discussed or displayed. Waimak is not an advisory service, all investors should consult a licensed professional before making any investment decisions. By accessing the Waimak's services, you agree to relinquish any recourse to claim damages resulting from the information received through the from us. The information that we provide has been obtained from sources which we believe are reliable however we make no guarantee as to the accuracy or completeness of such information. Please be aware, it is possible that Waimak Asset Management (WAM), it's employees or associates have a position in (either long or short) or have previously bought or sold shares in the companies for which information is presented. At times stocks managed or discussed by WAM may be already owned by any, of Waimak's employees or associates and their related entities. The information provided by Waimakassetmanagement.com, other communications, any related sites, webinars, emails or newsletters is intended for your sole consumption and use and is not be distributed to or shared with any 3rd party. All data is for your personal use only; it may not be posted on web sites, message boards, communicated verbally, or be used in products or services. All material in the Waimak website and its related websites and pages are protected under copyright laws of the Australia. In addition to this disclaimer, you acknowledge you have read and agree to be bound by the terms and conditions set out in the Waimak 'User Terms of Service. The information provided by Waimak and all related Waimak products is provided without regard to your investment goals, financial circumstances, investment knowledge, or personal attitudes towards risk, investing, or trading abilities. Investors can and do lose money from trading. Investments fail. You agree not to hold Waimak Asset Management Pty Ltd and all Waimak Employees and associates (including related entities) liable as a result of reading any material published on this Web site or provided by Waimak. The Information provided by Waimak is not to be relied upon for any of your investment decisions. Your decisions to buy, sell or hold any securities is as a result your own free will and your own research and in no way attributed to information accessed through Waimak.</p>
+
+    </div>
+</body>
+</html>

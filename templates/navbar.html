@@ -1,0 +1,222 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/">
+            <img src="/static/waimaklogo.webp" alt="Waimak Asset Management" class="nav-logo">
+        </a>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">HOME</a></li>
+            <li class="dropdown mobile-dropdown">
+                <a href="#" class="dropdown-toggle">
+                    ABOUT
+                    <span class="dropdown-icon">▼</span>
+                </a>
+                <div class="dropdown-content">
+                    <a href="/about">OUR TEAM</a>
+                    <a href="/approach">OUR APPROACH</a>
+                    <a href="/partners">OUR PARTNERS</a>
+                    <a href="/faq">FAQ</a>
+                </div>
+            </li>
+            <li><a href="/contact">CONTACT</a></li>
+            <li class="login-item"><a href="https://www.interactivebrokers.com.au/sso/Login" target="_blank" class="login-button">CLIENT LOGIN</a></li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f187;
+    }
+
+    .hamburger {
+        display: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 35px;
+        height: 4px;
+        margin: 6px 0;
+        background-color: #333;
+        transition: all 0.3s ease;
+    }
+
+    @media screen and (max-width: 768px) {
+        .hamburger {
+            display: block;
+            padding: 12px;
+        }
+
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 100px; /* Adjust this based on your navbar height */
+            left: 0;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Prevent clicks when not active */
+        }
+
+        .nav-menu.active {
+            display: block;
+            opacity: 1;
+            pointer-events: auto; /* Allow clicks when active */
+        }
+
+        .nav-menu li {
+            display: block;
+            margin: 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .nav-menu li a {
+            padding: 15px 0;
+            display: block;
+        }
+
+        .login-item {
+            margin: 0;
+            padding: 15px 20px;
+        }
+
+        .login-button {
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Ensure navbar has a solid background when mobile menu is open */
+        .navbar {
+            background: rgba(255, 255, 255, 0);
+        }
+
+        .dropdown-icon {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-content {
+            position: static;
+            display: none;
+            box-shadow: none;
+            background-color: #f9f9f9;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-toggle.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .nav-logo {
+            max-width: 180px;
+            height: auto;
+        }
+    }
+
+    .dropdown-icon {
+        display: none;
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .dropdown-icon {
+            display: inline;
+        }
+    }
+
+    .nav-logo {
+        padding-left: 2rem;
+    }
+
+    @media screen and (max-width: 768px) {
+        .nav-logo {
+            padding-left: 0;
+        }
+    }
+
+</style>
+
+<script>
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        
+        // Animate hamburger
+        const spans = hamburger.querySelectorAll('span');
+        if (hamburger.classList.contains('active')) {
+            spans[0].style.transform = 'rotate(-45deg) translate(-6px, 6px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(45deg) translate(-7px, -8px)';
+        } else {
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+    });
+
+    // Close menu when clicking a link (modified to exclude dropdown toggle)
+    document.querySelectorAll('.nav-menu a:not(.dropdown-toggle)').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            hamburger.querySelectorAll('span').forEach(span => {
+                span.style.transform = 'none';
+                span.style.opacity = '1';
+            });
+        });
+    });
+
+    // Add mobile dropdown functionality
+    document.querySelectorAll('.mobile-dropdown .dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdownContent = toggle.nextElementSibling;
+                toggle.classList.toggle('active');
+                dropdownContent.classList.toggle('show');
+            }
+        });
+    });
+</script>
