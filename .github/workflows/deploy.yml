@@ -63,9 +63,9 @@ jobs:
               # Replace include statement with navbar content
               content = content.replace('{% include \'navbar.html\' %}', navbar_content)
               
-              # Fix static file paths to be absolute from root
-              content = content.replace('\"/static/', '\"/static/')
-              content = content.replace('url_for(\'static\', filename=\'', '\"/static/')
+              # Fix static file paths to be relative
+              content = content.replace('\"/static/', '\"static/')
+              content = content.replace('url_for(\'static\', filename=\'', '\"static/')
               content = content.replace('\')', '\"')
               
               # Create directory if needed
