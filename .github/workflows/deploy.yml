@@ -52,16 +52,21 @@ jobs:
           # Copy static files
           os.system('cp -r public_html/static/* _site/static/')
           
-          # Read navbar content
-          with open('templates/navbar.html', 'r', encoding='utf-8') as f:
-              navbar_content = f.read()
-              # Fix navbar static paths
-              navbar_content = navbar_content.replace('{{ url_for(\'static\', filename=\'', './static/')
-              navbar_content = navbar_content.replace('\') }}', '')
+          def get_navbar_content(is_root=False):
+              with open('templates/navbar.html', 'r', encoding='utf-8') as f:
+                  navbar_content = f.read()
+                  # Fix navbar static paths based on whether it's a root page or not
+                  static_prefix = './static/' if is_root else '../static/'
+                  navbar_content = navbar_content.replace('{{ url_for(\'static\', filename=\'', static_prefix)
+                  navbar_content = navbar_content.replace('\') }}', '')
+                  return navbar_content
           
           def process_template(template_path, output_path, is_root=False):
               with open(template_path, 'r', encoding='utf-8') as f:
                   content = f.read()
+              
+              # Get navbar content with appropriate paths
+              navbar_content = get_navbar_content(is_root)
               
               # Replace include statement with navbar content
               content = content.replace('{% include \'navbar.html\' %}', navbar_content)
