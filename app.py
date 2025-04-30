@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 import os
 import sys
 import shutil
@@ -9,6 +9,9 @@ static_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public_h
 app = Flask(__name__, 
            static_folder=static_path,  # Use absolute path
            static_url_path='/static')  # Keep the URL path as /static
+
+# Force Flask to use HTTPS URLs when generating URLs for static files
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 app.config['TEMPLATES_AUTO_RELOAD'] = False  # Disable auto-reload in production
 
 @app.route('/')
