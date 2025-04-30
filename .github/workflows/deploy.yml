@@ -52,17 +52,6 @@ jobs:
           # Copy static files
           os.system('cp -r public_html/static/* _site/static/')
           
-          # Fix paths in CSS files
-          for root, dirs, files in os.walk('_site/static'):
-              for file in files:
-                  if file.endswith('.css'):
-                      css_path = os.path.join(root, file)
-                      with open(css_path, 'r', encoding='utf-8') as f:
-                          content = f.read()
-                      content = content.replace('\'/static/', '\'/Waimak-Website/static/')
-                      with open(css_path, 'w', encoding='utf-8') as f:
-                          f.write(content)
-          
           # Read navbar content
           with open('templates/navbar.html', 'r', encoding='utf-8') as f:
               navbar_content = f.read()
@@ -74,8 +63,10 @@ jobs:
               # Replace include statement with navbar content
               content = content.replace('{% include \'navbar.html\' %}', navbar_content)
               
-              # Fix static file paths
-              content = content.replace('\"/static/', '\"/Waimak-Website/static/')
+              # Fix static file paths to be absolute from root
+              content = content.replace('\"/static/', '\"/static/')
+              content = content.replace('url_for(\'static\', filename=\'', '\"/static/')
+              content = content.replace('\')', '\"')
               
               # Create directory if needed
               os.makedirs(os.path.dirname(output_path), exist_ok=True)
