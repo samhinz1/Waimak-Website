@@ -55,18 +55,21 @@ jobs:
           # Read navbar content
           with open('templates/navbar.html', 'r', encoding='utf-8') as f:
               navbar_content = f.read()
+              # Fix navbar static paths
+              navbar_content = navbar_content.replace('{{ url_for(\'static\', filename=\'', './static/')
+              navbar_content = navbar_content.replace('\') }}', '')
           
-          def process_template(template_path, output_path):
+          def process_template(template_path, output_path, is_root=False):
               with open(template_path, 'r', encoding='utf-8') as f:
                   content = f.read()
               
               # Replace include statement with navbar content
               content = content.replace('{% include \'navbar.html\' %}', navbar_content)
               
-              # Fix static file paths to be relative
-              content = content.replace('\"/static/', '\"static/')
-              content = content.replace('url_for(\'static\', filename=\'', '\"static/')
-              content = content.replace('\')', '\"')
+              # Fix static file paths
+              content = content.replace('{{ url_for(\'static\', filename=\'', './static/' if is_root else '../static/')
+              content = content.replace('\') }}', '')
+              content = content.replace('\"/static/', '\"./static/' if is_root else '\"../static/')
               
               # Create directory if needed
               os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -75,13 +78,13 @@ jobs:
               with open(output_path, 'w', encoding='utf-8') as f:
                   f.write(content)
           
-          # Process home page
-          process_template('templates/home.html', '_site/index.html')
+          # Process home page (at root level)
+          process_template('templates/home.html', '_site/index.html', is_root=True)
           
-          # Process other pages
+          # Process other pages (in subdirectories)
           pages = ['about', 'approach', 'contact', 'partners', 'faq']
           for page in pages:
-              process_template(f'templates/{page}.html', f'_site/{page}/index.html')
+              process_template(f'templates/{page}.html', f'_site/{page}/index.html', is_root=False)
           "
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
