@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Load reCAPTCHA v3 only -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LfPhzArAAAAAECjxzSjmVp_IezCQvjblLSJON7u"></script>
+    <!-- Load reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -60,12 +60,11 @@
                 <input type="text" name="name_verify" style="opacity: 0; position: absolute; z-index: -1;">
                 <input type="email" name="email_verify" style="opacity: 0; position: absolute; z-index: -1;">
 
-                <!-- reCAPTCHA v3 token (added dynamically) -->
-                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-                <input type="hidden" name="recaptcha_action" value="contact_form">
+                <!-- reCAPTCHA v2 widget -->
+                <div class="form-group">
+                    <div class="g-recaptcha" data-sitekey="6Lf8VDErAAAAANXUEdrkzJ4-W434GlZNSj0xBtNl"></div>
+                </div>
                 
-                <!-- Explicit captcha container removed -->
-
                 <!-- Feedback messages -->
                 <div id="successMessage" style="display: none; color: green; margin: 20px 0;">
                     Success: We have received your email and will reply to you shortly
@@ -75,6 +74,9 @@
                 </div>
                 <div id="spamMessage" style="display: none; color: red; margin: 20px 0;">
                     Error: This submission was identified as potential spam. Please try again or contact us directly via email.
+                </div>
+                <div id="captchaMessage" style="display: none; color: red; margin: 20px 0;">
+                    Error: Please complete the CAPTCHA verification
                 </div>
 
                 <button type="submit" class="submit-btn" id="submit-btn">Send Message</button>
@@ -345,6 +347,7 @@
         const successMessage = document.getElementById('successMessage');
         const errorMessage = document.getElementById('errorMessage');
         const spamMessage = document.getElementById('spamMessage');
+        const captchaMessage = document.getElementById('captchaMessage');
         const submitButton = document.getElementById('submit-btn');
         
         // Store submission time to prevent rapid submissions
@@ -361,195 +364,168 @@
         document.addEventListener('scroll', () => { userInteracted = true; scrollEvents++; });
         document.addEventListener('mousemove', () => { userInteracted = true; mouseEvents++; });
         
-        // Initialize reCAPTCHA
-        grecaptcha.ready(function() {
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
+        // Initialize form handling
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Hide all messages first
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            spamMessage.style.display = 'none';
+            captchaMessage.style.display = 'none';
+            
+            // Check for rapid successive submissions (throttling)
+            const now = Date.now();
+            if (now - lastSubmissionTime < 10000) { // 10 seconds
+                spamMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check if the user has interacted with the page like a human would
+            // Most bots don't trigger these events or do so in non-human patterns
+            if (!userInteracted || typeEvents < 2 || (mouseEvents < 5 && scrollEvents < 1)) {
+                console.log('Bot behavior detected - low interaction');
+                spamMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check honeypot fields - if these are filled, it's likely a bot
+            if (form.botcheck.value !== '' || 
+                form.name_verify.value !== '' || 
+                form.email_verify.value !== '') {
+                // Silently fail for bots
+                console.log('Bot detected');
+                spamMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check reCAPTCHA v2
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                captchaMessage.style.display = 'block';
+                return;
+            }
+            
+            try {
+                // Disable button during submission
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
                 
-                // Check for rapid successive submissions (throttling)
-                const now = Date.now();
-                if (now - lastSubmissionTime < 10000) { // 10 seconds
+                // Form validation
+                const name = form.name.value.trim();
+                const email = form.email.value.trim();
+                const message = form.message.value.trim();
+                const phone = form.phone.value.trim();
+                
+                // Additional check - detect if the same value is used in regular and honeypot fields
+                // This catches spammers who fill everything in
+                if (email === form.email_verify.value || name === form.name_verify.value) {
+                    console.log('Bot detected - matching honeypot fields');
                     spamMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
-                    errorMessage.style.display = 'none';
                     return;
                 }
                 
-                // Check if the user has interacted with the page like a human would
-                // Most bots don't trigger these events or do so in non-human patterns
-                if (!userInteracted || typeEvents < 2 || (mouseEvents < 5 && scrollEvents < 1)) {
-                    console.log('Bot behavior detected - low interaction');
+                // Simple validation checks
+                if (name.length < 2 || email.indexOf('@') === -1 || message.length < 10) {
+                    throw new Error('Please fill out all fields correctly');
+                }
+                
+                // Additional suspicious patterns when combined with other signals
+                const moderatelySuspiciousPatterns = [
+                    /@icloud\.com$/i, // Frequently used by spammers
+                    /@gmail\.com$/i,  // When combined with random usernames
+                    /@hotmail\.com$/i,
+                    /@outlook\.com$/i
+                ];
+                
+                // Check for suspicious name patterns (random letters, unusual capitalization)
+                const suspiciousNamePattern = /^[A-Z][a-z]*[A-Z][a-z]*$|^[a-zA-Z]{8,}$/;
+                if (suspiciousNamePattern.test(name)) {
+                    console.log('Bot detected - suspicious name pattern');
                     spamMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
-                    errorMessage.style.display = 'none';
                     return;
                 }
                 
-                // Check honeypot fields - if these are filled, it's likely a bot
-                if (form.botcheck.value !== '' || 
-                    form.name_verify.value !== '' || 
-                    form.email_verify.value !== '') {
-                    // Silently fail for bots
-                    console.log('Bot detected');
+                // For moderately suspicious patterns, apply additional checks
+                if (moderatelySuspiciousPatterns.some(pattern => pattern.test(email))) {
+                    // If email is moderately suspicious and name looks random or message is empty
+                    if (!/^[A-Za-z\s]{2,30}$/.test(name) || message.length < 20) {
+                        console.log('Bot detected - suspicious email combined with other signals');
+                        spamMessage.style.display = 'block';
+                        return;
+                    }
+                }
+                
+                // More spam detection - check for typical spam patterns
+                const spamPatterns = [
+                    /buy viagra/i, 
+                    /casino/i, 
+                    /lottery/i,
+                    /\[url=/i,
+                    /http:\/\/\S+/g,
+                    /sex/i,
+                    /dating/i,
+                    /bitcoin/i,
+                    /crypto/i,
+                    /investment opportunity/i,
+                    /seo/i,
+                    /backlink/i,
+                    /earn money/i
+                ];
+                
+                if (spamPatterns.some(pattern => 
+                    pattern.test(name) || pattern.test(email) || pattern.test(message))) {
                     spamMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
-                    errorMessage.style.display = 'none';
                     return;
                 }
                 
-                try {
-                    // Get reCAPTCHA token
-                    submitButton.disabled = true;
-                    submitButton.textContent = 'Sending...';
-                    
-                    const token = await grecaptcha.execute('6LfPhzArAAAAAECjxzSjmVp_IezCQvjblLSJON7u', {action: 'contact_form'});
-                    document.getElementById('g-recaptcha-response').value = token;
-                    
-                    // Form validation
-                    const name = form.name.value.trim();
-                    const email = form.email.value.trim();
-                    const message = form.message.value.trim();
-                    const phone = form.phone.value.trim();
-                    
-                    // Additional check - detect if the same value is used in regular and honeypot fields
-                    // This catches spammers who fill everything in
-                    if (email === form.email_verify.value || name === form.name_verify.value) {
-                        console.log('Bot detected - matching honeypot fields');
-                        spamMessage.style.display = 'block';
-                        successMessage.style.display = 'none';
-                        errorMessage.style.display = 'none';
-                        return;
-                    }
-                    
-                    // Simple validation checks
-                    if (name.length < 2 || email.indexOf('@') === -1 || message.length < 10) {
-                        throw new Error('Please fill out all fields correctly');
-                    }
-                    
-                    // Check for suspicious patterns in email
-                    const suspiciousEmailPatterns = [
-                        /\.ru$/i, // Russian domains often used for spam
-                        /\.xyz$/i, // Common for temporary domains
-                        /^(admin|info|sales|support|service)@/i, // Generic addresses
-                        /\d{4,}@/i // Emails with many numbers
-                    ];
-                    
-                    // Additional suspicious patterns when combined with other signals
-                    const moderatelySuspiciousPatterns = [
-                        /@icloud\.com$/i, // Frequently used by spammers
-                        /@gmail\.com$/i,  // When combined with random usernames
-                        /@hotmail\.com$/i,
-                        /@outlook\.com$/i
-                    ];
-                    
-                    // Check for suspicious name patterns (random letters, unusual capitalization)
-                    const suspiciousNamePattern = /^[A-Z][a-z]*[A-Z][a-z]*$|^[a-zA-Z]{8,}$/;
-                    if (suspiciousNamePattern.test(name)) {
-                        console.log('Bot detected - suspicious name pattern');
-                        spamMessage.style.display = 'block';
-                        successMessage.style.display = 'none';
-                        errorMessage.style.display = 'none';
-                        return;
-                    }
-                    
-                    if (suspiciousEmailPatterns.some(pattern => pattern.test(email))) {
-                        // Higher scrutiny for suspicious emails
-                        if (message.length < 30 || message.toLowerCase().includes('http')) {
-                            spamMessage.style.display = 'block';
-                            successMessage.style.display = 'none';
-                            errorMessage.style.display = 'none';
-                            return;
-                        }
-                    }
-                    
-                    // For moderately suspicious patterns, apply additional checks
-                    if (moderatelySuspiciousPatterns.some(pattern => pattern.test(email))) {
-                        // If email is moderately suspicious and name looks random or message is empty
-                        if (!/^[A-Za-z\s]{2,30}$/.test(name) || message.length < 20) {
-                            console.log('Bot detected - suspicious email combined with other signals');
-                            spamMessage.style.display = 'block';
-                            successMessage.style.display = 'none';
-                            errorMessage.style.display = 'none';
-                            return;
-                        }
-                    }
-                    
-                    // More spam detection - check for typical spam patterns
-                    const spamPatterns = [
-                        /buy viagra/i, 
-                        /casino/i, 
-                        /lottery/i,
-                        /\[url=/i,
-                        /http:\/\/\S+/g,
-                        /sex/i,
-                        /dating/i,
-                        /bitcoin/i,
-                        /crypto/i,
-                        /investment opportunity/i,
-                        /seo/i,
-                        /backlink/i,
-                        /earn money/i
-                    ];
-                    
-                    if (spamPatterns.some(pattern => 
-                        pattern.test(name) || pattern.test(email) || pattern.test(message))) {
-                        spamMessage.style.display = 'block';
-                        successMessage.style.display = 'none';
-                        errorMessage.style.display = 'none';
-                        return;
-                    }
-                    
-                    // If too many links in message, likely spam
-                    const linkCount = (message.match(/http/g) || []).length;
-                    if (linkCount > 2) {
-                        spamMessage.style.display = 'block';
-                        successMessage.style.display = 'none';
-                        errorMessage.style.display = 'none';
-                        return;
-                    }
+                // If too many links in message, likely spam
+                const linkCount = (message.match(/http/g) || []).length;
+                if (linkCount > 2) {
+                    spamMessage.style.display = 'block';
+                    return;
+                }
 
-                    // Submit form with all the checks
-                    const formData = new FormData(this);
+                // Submit form with all the checks
+                const formData = new FormData(this);
+                
+                // Add a timestamp to help identify when the form was submitted
+                formData.append('submission_time', new Date().toString());
+                formData.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+                
+                // Add a custom field to help filter spam in web3forms
+                formData.append('form_metadata', JSON.stringify({
+                    browser: navigator.userAgent,
+                    referrer: document.referrer,
+                    screen_size: `${window.innerWidth}x${window.innerHeight}`
+                }));
+                
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Reset form and captcha
+                    this.reset();
+                    grecaptcha.reset();
                     
-                    // Add a timestamp to help identify when the form was submitted
-                    formData.append('submission_time', new Date().toString());
-                    formData.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone);
-                    
-                    // Add a custom field to help filter spam in web3forms
-                    formData.append('form_metadata', JSON.stringify({
-                        browser: navigator.userAgent,
-                        referrer: document.referrer,
-                        screen_size: `${window.innerWidth}x${window.innerHeight}`
-                    }));
-                    
-                    const response = await fetch(this.action, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const data = await response.json();
-                    
-                    if (data.success) {
-                        this.reset();
-                        successMessage.style.display = 'block';
-                        errorMessage.style.display = 'none';
-                        spamMessage.style.display = 'none';
-                        // Update last submission time
-                        lastSubmissionTime = Date.now();
-                    } else {
-                        throw new Error(data.message || 'Form submission failed');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    errorMessage.textContent = 'Error: ' + (error.message || 'Something went wrong. Please try again.');
-                    errorMessage.style.display = 'block';
-                    successMessage.style.display = 'none';
-                    spamMessage.style.display = 'none';
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Send Message';
+                    successMessage.style.display = 'block';
+                    // Update last submission time
+                    lastSubmissionTime = Date.now();
+                } else {
+                    throw new Error(data.message || 'Form submission failed');
                 }
-            });
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = 'Error: ' + (error.message || 'Something went wrong. Please try again.');
+                errorMessage.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
+            }
         });
 
         function wrapTextNodes(container) {
