@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Add Google reCAPTCHA API -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Load reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfPhzArAAAAAECjxzSjmVp_IezCQvjblLSJON7u"></script>
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -34,7 +34,7 @@
             <h3>Contact Form</h3>
             <form action="https://api.web3forms.com/submit" method="POST" id="contactForm">
                 <input type="hidden" name="access_key" value="351b32db-4726-4d99-826f-f8e36d1d2664">
-                
+
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required>
@@ -55,28 +55,28 @@
                     <textarea id="message" name="message" rows="4" required></textarea>
                 </div>
 
-                <!-- Add reCAPTCHA widget -->
-                <div class="form-group">
-                    <div class="g-recaptcha" data-sitekey="6LdKqDArAAAAAJLJ8zq_ipJ2R2WEebdCBljre1rn"></div>
-                </div>
-
-                <!-- Optional: Add spam protection -->
+                <!-- Spam protection -->
                 <input type="hidden" name="botcheck" style="display: none;">
 
-                <!-- Add success message div (initially hidden) -->
+                <!-- reCAPTCHA v3 token (added dynamically) -->
+                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+
+                <!-- Feedback messages -->
                 <div id="successMessage" style="display: none; color: green; margin: 20px 0;">
                     Success: We have received your email and will reply to you shortly
                 </div>
-
-                <!-- Add error message div (initially hidden) -->
                 <div id="errorMessage" style="display: none; color: red; margin: 20px 0;">
-                    Error: Please complete the reCAPTCHA verification
+                    Error: reCAPTCHA verification failed
                 </div>
 
                 <button type="submit" class="submit-btn">Send Message</button>
             </form>
         </div>
     </section>
+
+
+
+
 
     <style>
         .banner {
@@ -333,6 +333,45 @@
     </style>
 
     <script>
+        const form = document.getElementById('contactForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Initialize reCAPTCHA
+        grecaptcha.ready(function() {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                try {
+                    // Get reCAPTCHA token
+                    const token = await grecaptcha.execute('6LfPhzArAAAAAECjxzSjmVp_IezCQvjblLSJON7u', {action: 'submit'});
+                    document.getElementById('g-recaptcha-response').value = token;
+
+                    // Submit form
+                    const formData = new FormData(this);
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.reset();
+                        successMessage.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                    } else {
+                        throw new Error(data.message || 'Form submission failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorMessage.textContent = 'Error: ' + (error.message || 'Something went wrong. Please try again.');
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }
+            });
+        });
+
         function wrapTextNodes(container) {
             // Skip if this is a script or style tag
             if (['SCRIPT', 'STYLE'].includes(container.tagName)) return;
@@ -406,23 +445,6 @@
             
             window.addEventListener('scroll', handleScroll);
             handleScroll();
-        });
-
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            fetch(this.action, {
-                method: 'POST',
-                body: new FormData(this)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.reset();
-                    document.getElementById('successMessage').style.display = 'block';
-                }
-            })
-            .catch(error => console.error('Error:', error));
         });
     </script>
 
