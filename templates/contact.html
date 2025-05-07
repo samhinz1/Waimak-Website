@@ -350,6 +350,17 @@
         // Store submission time to prevent rapid submissions
         let lastSubmissionTime = 0;
         
+        // Add event tracking for bot detection
+        let userInteracted = false;
+        let typeEvents = 0;
+        let scrollEvents = 0;
+        let mouseEvents = 0;
+        
+        // Track user interaction events that real humans typically perform
+        document.addEventListener('keydown', () => { userInteracted = true; typeEvents++; });
+        document.addEventListener('scroll', () => { userInteracted = true; scrollEvents++; });
+        document.addEventListener('mousemove', () => { userInteracted = true; mouseEvents++; });
+        
         // Initialize reCAPTCHA
         grecaptcha.ready(function() {
             form.addEventListener('submit', async function(e) {
@@ -358,6 +369,16 @@
                 // Check for rapid successive submissions (throttling)
                 const now = Date.now();
                 if (now - lastSubmissionTime < 10000) { // 10 seconds
+                    spamMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                    errorMessage.style.display = 'none';
+                    return;
+                }
+                
+                // Check if the user has interacted with the page like a human would
+                // Most bots don't trigger these events or do so in non-human patterns
+                if (!userInteracted || typeEvents < 2 || (mouseEvents < 5 && scrollEvents < 1)) {
+                    console.log('Bot behavior detected - low interaction');
                     spamMessage.style.display = 'block';
                     successMessage.style.display = 'none';
                     errorMessage.style.display = 'none';
@@ -390,6 +411,16 @@
                     const message = form.message.value.trim();
                     const phone = form.phone.value.trim();
                     
+                    // Additional check - detect if the same value is used in regular and honeypot fields
+                    // This catches spammers who fill everything in
+                    if (email === form.email_verify.value || name === form.name_verify.value) {
+                        console.log('Bot detected - matching honeypot fields');
+                        spamMessage.style.display = 'block';
+                        successMessage.style.display = 'none';
+                        errorMessage.style.display = 'none';
+                        return;
+                    }
+                    
                     // Simple validation checks
                     if (name.length < 2 || email.indexOf('@') === -1 || message.length < 10) {
                         throw new Error('Please fill out all fields correctly');
@@ -403,9 +434,39 @@
                         /\d{4,}@/i // Emails with many numbers
                     ];
                     
+                    // Additional suspicious patterns when combined with other signals
+                    const moderatelySuspiciousPatterns = [
+                        /@icloud\.com$/i, // Frequently used by spammers
+                        /@gmail\.com$/i,  // When combined with random usernames
+                        /@hotmail\.com$/i,
+                        /@outlook\.com$/i
+                    ];
+                    
+                    // Check for suspicious name patterns (random letters, unusual capitalization)
+                    const suspiciousNamePattern = /^[A-Z][a-z]*[A-Z][a-z]*$|^[a-zA-Z]{8,}$/;
+                    if (suspiciousNamePattern.test(name)) {
+                        console.log('Bot detected - suspicious name pattern');
+                        spamMessage.style.display = 'block';
+                        successMessage.style.display = 'none';
+                        errorMessage.style.display = 'none';
+                        return;
+                    }
+                    
                     if (suspiciousEmailPatterns.some(pattern => pattern.test(email))) {
                         // Higher scrutiny for suspicious emails
                         if (message.length < 30 || message.toLowerCase().includes('http')) {
+                            spamMessage.style.display = 'block';
+                            successMessage.style.display = 'none';
+                            errorMessage.style.display = 'none';
+                            return;
+                        }
+                    }
+                    
+                    // For moderately suspicious patterns, apply additional checks
+                    if (moderatelySuspiciousPatterns.some(pattern => pattern.test(email))) {
+                        // If email is moderately suspicious and name looks random or message is empty
+                        if (!/^[A-Za-z\s]{2,30}$/.test(name) || message.length < 20) {
+                            console.log('Bot detected - suspicious email combined with other signals');
                             spamMessage.style.display = 'block';
                             successMessage.style.display = 'none';
                             errorMessage.style.display = 'none';
@@ -453,6 +514,13 @@
                     // Add a timestamp to help identify when the form was submitted
                     formData.append('submission_time', new Date().toString());
                     formData.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+                    
+                    // Add a custom field to help filter spam in web3forms
+                    formData.append('form_metadata', JSON.stringify({
+                        browser: navigator.userAgent,
+                        referrer: document.referrer,
+                        screen_size: `${window.innerWidth}x${window.innerHeight}`
+                    }));
                     
                     const response = await fetch(this.action, {
                         method: 'POST',
